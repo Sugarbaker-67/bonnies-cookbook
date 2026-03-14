@@ -505,9 +505,11 @@ function removeEmail(e) {
 }
 
 function parseRecipeViaAI(text, callback) {
+  var key = localStorage.getItem("cb_apikey") || "";
+  if (!key) { callback(new Error("No API key found"), null); return; }
   fetch("https://api.anthropic.com/v1/messages", {
     method: "POST",
-    headers: { "Content-Type": "application/json", "x-api-key": apiKey, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" },
+    headers: { "Content-Type": "application/json", "x-api-key": key, "anthropic-version": "2023-06-01", "anthropic-dangerous-direct-browser-access": "true" },
     body: JSON.stringify({
       model: "claude-sonnet-4-20250514",
       max_tokens: 1000,
@@ -616,6 +618,7 @@ function handleUpload(input) {
       parseRecipeViaAI(e.target.result, function(err, parsed) {
         if (err || !parsed) {
           item.status = "error";
+          item.parsed = err ? err.message : "Unknown error";
         } else {
           recipes.push({ id: Date.now().toString() + "_" + Math.random(), photo: "", name: parsed.name, prep: parsed.prep || "—", cook: parsed.cook || "—", servings: parsed.servings || "—", ingredients: parsed.ingredients || [], steps: parsed.steps || [] });
           saveRecipes();
