@@ -184,8 +184,10 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;backgrou
     <div class="settings-card">
       <div class="settings-card-title">API Key</div>
       <div style="font-size:13px;color:#888;margin-bottom:8px;">Update your Anthropic API key here if needed.</div>
-      <input type="password" class="text-input" id="settings-key" placeholder="sk-ant-api...">
+      <input type="text" class="text-input" id="settings-key" placeholder="sk-ant-api...">
       <button class="save-btn" style="margin-top:8px;" onclick="updateApiKey()">Update Key</button>
+      <button class="save-btn" style="margin-top:8px;background:#555;" onclick="testApiKey()">Test API Key</button>
+      <div id="api-test-result" style="font-size:13px;margin-top:8px;word-break:break-all;"></div>
     </div>
 
     <div class="settings-card">
