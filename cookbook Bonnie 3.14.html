@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Bonnie's Cookbook — March 13</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f5f0;color:#1a1a1a;min-height:100vh;}
+:root{--green:#2d5016;--light-green:#e8f0dc;}
+.header{background:var(--green);color:white;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:20;}
+.header-left{display:flex;align-items:center;gap:10px;}
+.logo{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.4);}
+.header-title{font-size:20px;font-weight:600;}
+.header-sub{font-size:11px;opacity:0.7;margin-top:1px;}
+.icon-btn{background:none;border:none;color:white;font-size:20px;cursor:pointer;padding:4px;}
+.banner{width:100%;height:160px;object-fit:cover;display:block;}
+.banner-placeholder{width:100%;height:160px;background:linear-gradient(135deg,#3a6b1a,#1a3a0a);display:flex;align-items:center;justify-content:center;font-size:48px;}
+.search-wrap{padding:10px 14px;background:white;border-bottom:1px solid #e8e8e8;position:sticky;top:62px;z-index:10;}
+.search-input{width:100%;padding:9px 14px;border:1px solid #ddd;border-radius:22px;font-size:15px;outline:none;background:#f8f8f8;}
+.search-input:focus{border-color:var(--green);background:white;}
+.list{padding:10px 14px 90px;display:flex;flex-direction:column;gap:9px;}
+.card{background:white;border-radius:12px;overflow:hidden;border:1px solid #e8e8e8;display:flex;cursor:pointer;}
+.card:active{box-shadow:0 2px 10px rgba(0,0,0,0.1);}
+.card-thumb{width:72px;height:72px;object-fit:cover;flex-shrink:0;}
+.card-thumb-placeholder{width:72px;height:72px;background:var(--light-green);display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0;}
+.card-body{padding:10px 12px;flex:1;display:flex;justify-content:space-between;align-items:center;}
+.card-name{font-size:15px;font-weight:500;}
+.card-meta{font-size:12px;color:#999;margin-top:2px;}
+.card-arrow{color:#ccc;font-size:20px;}
+.empty{text-align:center;padding:40px 20px;color:#aaa;font-size:15px;}
+.fab{position:fixed;bottom:22px;right:16px;background:var(--green);color:white;border:none;border-radius:50%;width:54px;height:54px;font-size:26px;cursor:pointer;box-shadow:0 4px 16px rgba(45,80,22,0.4);z-index:50;display:flex;align-items:center;justify-content:center;}
+.detail-header{background:var(--green);color:white;padding:12px 14px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:20;}
+.back-btn{background:none;border:none;color:white;font-size:24px;cursor:pointer;padding:0;line-height:1;}
+.detail-title{font-size:17px;font-weight:600;flex:1;}
+.recipe-photo{width:100%;height:200px;object-fit:cover;display:block;}
+.photo-placeholder{width:100%;height:140px;background:var(--light-green);display:flex;align-items:center;justify-content:center;font-size:52px;}
+.photo-actions{display:flex;gap:8px;padding:8px 14px;background:#f9f9f9;border-bottom:1px solid #eee;}
+.photo-url-input{flex:1;padding:7px 10px;border:1px solid #ddd;border-radius:8px;font-size:13px;outline:none;}
+.photo-set-btn{background:var(--green);color:white;border:none;padding:7px 12px;border-radius:8px;font-size:13px;cursor:pointer;}
+.meta-row{display:flex;border-bottom:1px solid #eee;}
+.meta-box{flex:1;text-align:center;padding:12px 0;}
+.meta-label{font-size:10px;color:#aaa;text-transform:uppercase;letter-spacing:0.5px;}
+.meta-val{font-size:15px;font-weight:500;color:var(--green);margin-top:2px;}
+.section-title{font-size:13px;font-weight:600;color:var(--green);padding:14px 14px 6px;text-transform:uppercase;letter-spacing:0.5px;}
+.ingredient{padding:8px 14px;border-bottom:1px solid #f5f5f5;font-size:15px;display:flex;gap:8px;}
+.dot{color:var(--green);font-weight:700;font-size:16px;}
+.step{padding:10px 14px 10px 46px;border-bottom:1px solid #f5f5f5;font-size:15px;line-height:1.5;position:relative;}
+.step-num{position:absolute;left:14px;top:10px;background:var(--green);color:white;border-radius:50%;width:22px;height:22px;font-size:12px;display:flex;align-items:center;justify-content:center;font-weight:600;}
+.detail-actions{display:flex;gap:8px;padding:14px;padding-bottom:90px;}
+.email-btn{flex:1;background:var(--green);color:white;border:none;padding:13px;border-radius:10px;font-size:15px;font-weight:500;cursor:pointer;}
+.edit-btn{background:white;color:var(--green);border:2px solid var(--green);padding:13px 20px;border-radius:10px;font-size:15px;font-weight:500;cursor:pointer;}
+.page-body{padding:14px 14px 90px;}
+.settings-card{background:white;border-radius:12px;padding:14px;margin-bottom:12px;border:1px solid #e8e8e8;}
+.settings-card-title{font-size:13px;font-weight:600;color:var(--green);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;}
+.field-label{font-size:13px;color:#888;margin-bottom:4px;display:block;margin-top:8px;}
+.text-input{width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:8px;font-size:15px;outline:none;margin-bottom:4px;}
+.textarea{width:100%;padding:9px 12px;border:1px solid #ddd;border-radius:8px;font-size:15px;outline:none;min-height:120px;resize:vertical;font-family:inherit;margin-bottom:4px;}
+.row3{display:flex;gap:8px;}
+.row3>div{flex:1;}
+.save-btn{background:var(--green);color:white;border:none;padding:13px 0;border-radius:10px;font-size:16px;font-weight:500;cursor:pointer;width:100%;margin-top:8px;}
+.delete-full-btn{background:white;color:#d00;border:2px solid #d00;padding:13px 0;border-radius:10px;font-size:15px;font-weight:500;cursor:pointer;width:100%;margin-top:8px;}
+.divider{text-align:center;font-size:13px;color:#aaa;margin:4px 0 12px;position:relative;}
+.divider:before,.divider:after{content:'';position:absolute;top:50%;width:40%;height:1px;background:#e0e0e0;}
+.divider:before{left:0;}.divider:after{right:0;}
+.upload-box{border:2px dashed #ccc;border-radius:12px;padding:22px 14px;text-align:center;cursor:pointer;background:var(--light-green);margin-bottom:4px;}
+.upload-title{font-size:15px;font-weight:500;color:var(--green);}
+.upload-sub{font-size:12px;color:#888;margin-top:4px;}
+.upload-queue{margin-top:12px;display:flex;flex-direction:column;gap:6px;}
+.queue-item{background:white;border-radius:8px;padding:10px 12px;border:1px solid #e8e8e8;font-size:14px;display:flex;align-items:center;gap:8px;}
+.queue-status{font-size:18px;width:24px;text-align:center;}
+.email-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f5f5f5;font-size:15px;}
+.email-add-row{display:flex;gap:8px;margin-top:10px;}
+.email-input{flex:1;padding:9px 12px;border:1px solid #ddd;border-radius:8px;font-size:15px;outline:none;}
+.add-email-btn{background:var(--green);color:white;border:none;padding:9px 16px;border-radius:8px;font-size:14px;cursor:pointer;font-weight:500;}
+.remove-btn{background:none;border:none;color:#d00;font-size:18px;cursor:pointer;padding:0 4px;}
+.toast{position:fixed;bottom:84px;left:50%;transform:translateX(-50%);background:#1a1a1a;color:white;padding:10px 20px;border-radius:20px;font-size:14px;z-index:200;white-space:nowrap;pointer-events:none;opacity:0;transition:opacity 0.3s;}
+.toast.show{opacity:1;}
+.view{display:none;}.view.active{display:block;}
+</style>
+</head>
+<body>
+
+<!-- LIST -->
+<div id="view-list" class="view active">
+  <div class="header">
+    <div class="header-left">
+      <img class="logo" src="https://em-content.zobj.net/source/apple/354/cook_1f9d1-200d-1f373.png" alt="chef" onerror="this.style.display='none'">
+      <div>
+        <div class="header-title">Bonnie's Cookbook</div>
+        <div class="header-sub" id="recipe-count">0 recipes</div>
+      </div>
+    </div>
+    <button class="icon-btn" onclick="showView('settings')">⚙️</button>
+  </div>
+  <div id="banner-wrap"><div class="banner-placeholder">🍽️</div></div>
+  <div class="search-wrap">
+    <input class="search-input" id="search" placeholder="Search recipes..." oninput="renderList()">
+  </div>
+  <div class="list" id="recipe-list"></div>
+  <button class="fab" onclick="showView('add')">+</button>
+</div>
+
+<!-- DETAIL -->
+<div id="view-detail" class="view">
+  <div class="detail-header">
+    <button class="back-btn" onclick="showView('list')">←</button>
+    <span class="detail-title" id="d-title"></span>
+  </div>
+  <div id="d-body"></div>
+</div>
+
+<!-- EDIT -->
+<div id="view-edit" class="view">
+  <div class="header">
+    <div class="header-left">
+      <button class="back-btn" onclick="showView('detail')">←</button>
+      <div class="header-title" style="margin-left:6px;">Edit Recipe</div>
+    </div>
+  </div>
+  <div class="page-body">
+    <div class="settings-card">
+      <label class="field-label">Recipe Name</label>
+      <input class="text-input" id="e-name">
+      <div class="row3">
+        <div><label class="field-label">Prep Time</label><input class="text-input" id="e-prep"></div>
+        <div><label class="field-label">Cook Time</label><input class="text-input" id="e-cook"></div>
+        <div><label class="field-label">Servings</label><input class="text-input" id="e-servings"></div>
+      </div>
+      <label class="field-label">Photo URL (optional)</label>
+      <input class="text-input" id="e-photo" placeholder="https://...">
+      <label class="field-label">Ingredients (one per line)</label>
+      <textarea class="textarea" id="e-ingredients"></textarea>
+      <label class="field-label">Steps (one per line)</label>
+      <textarea class="textarea" id="e-steps"></textarea>
+      <button class="save-btn" onclick="saveEdit()">Save Changes</button>
+      <button class="delete-full-btn" onclick="deleteCurrentRecipe()">Delete Recipe</button>
+    </div>
+  </div>
+</div>
+
+<!-- SETTINGS -->
+<div id="view-settings" class="view">
+  <div class="header">
+    <div class="header-left">
+      <button class="back-btn" onclick="showView('list')">←</button>
+      <div class="header-title" style="margin-left:6px;">Settings</div>
+    </div>
+  </div>
+  <div class="page-body">
+    <div class="settings-card">
+      <div class="settings-card-title">Email Addresses</div>
+      <div style="font-size:13px;color:#999;margin-bottom:8px;">Ingredient lists will be sent to all addresses below.</div>
+      <div id="email-list"></div>
+      <div class="email-add-row">
+        <input class="email-input" id="new-email" type="email" placeholder="Add email address" onkeydown="if(event.key==='Enter')addEmail()">
+        <button class="add-email-btn" onclick="addEmail()">Add</button>
+      </div>
+    </div>
+    <div class="settings-card">
+      <div class="settings-card-title">Cookbook Banner Photo</div>
+      <div style="font-size:13px;color:#888;margin-bottom:8px;">Paste a photo URL to set the banner at the top of your cookbook.</div>
+      <div style="display:flex;gap:8px;">
+        <input class="email-input" id="banner-url" placeholder="https://...">
+        <button class="add-email-btn" onclick="setBanner()">Set</button>
+      </div>
+      <div style="font-size:12px;color:#aaa;margin-top:6px;">Tip: Find a food photo on Unsplash.com, tap it, copy the image URL.</div>
+    </div>
+    <div class="settings-card">
+      <div class="settings-card-title">Backup &amp; Restore</div>
+      <div style="font-size:14px;color:#555;margin-bottom:12px;" id="stats-text"></div>
+      <button class="save-btn" onclick="exportData()">📥 Export recipes (JSON backup)</button>
+      <div style="font-size:12px;color:#999;margin-top:8px;text-align:center;">Saves all your recipes as a backup file.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ADD -->
+<div id="view-add" class="view">
+  <div class="header">
+    <div class="header-left">
+      <button class="back-btn" onclick="showView('list')">←</button>
+      <div class="header-title" style="margin-left:6px;">Add Recipes</div>
+    </div>
+  </div>
+  <div class="page-body">
+
+    <!-- PASTE TEXT -->
+    <div class="settings-card">
+      <div class="settings-card-title">📝 Paste Recipe Text</div>
+      <div style="font-size:13px;color:#888;margin-bottom:8px;">Paste one or multiple recipes. Separate multiple recipes with a line containing only <strong>---</strong></div>
+      <textarea class="textarea" id="paste-text" placeholder="Paste recipe text here...&#10;&#10;---&#10;&#10;Paste another recipe here..."></textarea>
+      <button class="save-btn" id="paste-btn" onclick="handlePaste()">Parse &amp; Add Recipes</button>
+      <div class="upload-queue" id="paste-queue"></div>
+    </div>
+
+    <!-- FILE UPLOAD -->
+    <div class="settings-card">
+      <div class="settings-card-title">📄 Upload Files</div>
+      <div style="font-size:13px;color:#888;margin-bottom:10px;">Select one or multiple recipe files — AI will parse each one automatically.</div>
+      <div class="upload-box" onclick="document.getElementById('file-input').click()">
+        <div class="upload-title">Tap to upload files</div>
+        <div class="upload-sub">PDF, TXT, DOC or DOCX</div>
+      </div>
+      <input type="file" id="file-input" accept=".pdf,.txt,.doc,.docx" multiple style="display:none" onchange="handleUpload(this)">
+      <div class="upload-queue" id="upload-queue"></div>
+    </div>
+
+    <!-- PHOTO -->
+    <div class="settings-card">
+      <div class="settings-card-title">📷 Photo of a Recipe</div>
+      <div style="font-size:13px;color:#888;margin-bottom:10px;">Take a photo or choose from your library — AI will read and extract the recipe.</div>
+      <div class="upload-box" onclick="document.getElementById('photo-input').click()">
+        <div class="upload-title">Tap to take or choose photo</div>
+        <div class="upload-sub">Camera or photo library — select multiple</div>
+      </div>
+      <input type="file" id="photo-input" accept="image/*" multiple style="display:none" onchange="handlePhotoUpload(this)">
+      <div class="upload-queue" id="photo-queue"></div>
+    </div>
+
+    <div class="divider">or enter manually</div>
+
+    <!-- MANUAL -->
+    <div class="settings-card">
+      <div class="settings-card-title">✏️ Enter Manually</div>
+      <label class="field-label">Recipe Name *</label>
+      <input class="text-input" id="f-name" placeholder="e.g. Chicken Marsala">
+      <div class="row3">
+        <div><label class="field-label">Prep Time</label><input class="text-input" id="f-prep" placeholder="15 min"></div>
+        <div><label class="field-label">Cook Time</label><input class="text-input" id="f-cook" placeholder="30 min"></div>
+        <div><label class="field-label">Servings</label><input class="text-input" id="f-servings" placeholder="4"></div>
+      </div>
+      <label class="field-label">Ingredients (one per line)</label>
+      <textarea class="textarea" id="f-ingredients" placeholder="2 chicken breasts&#10;1 cup flour&#10;..."></textarea>
+      <label class="field-label">Steps (one per line)</label>
+      <textarea class="textarea" id="f-steps" placeholder="Season the chicken...&#10;Heat oil in pan..."></textarea>
+      <button class="save-btn" onclick="saveManual()">Save Recipe</button>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+var INITIAL = [
+  {id:"1",name:"Chicken Mushroom Stroganoff",prep:"15 min",cook:"30 min",servings:"4",photo:"",ingredients:["1½ lbs chicken breast or thighs, bite-sized","2 tbsp olive oil","1 tbsp unsalted butter","1 large onion, finely chopped","3 garlic cloves, minced","8 oz mushrooms, sliced","2 tbsp all-purpose flour","1½ cups chicken broth","1 cup sour cream","1 tbsp Dijon mustard","1 tsp paprika","Salt and black pepper to taste","2 tbsp fresh parsley, chopped"],steps:["Heat olive oil in skillet over medium heat. Season chicken, cook until golden, 5–7 min. Remove and set aside.","Melt butter in same skillet. Sauté onions until translucent, 3–4 min. Add garlic, cook 1 min.","Add mushrooms, cook until softened and browned, ~5 min.","Sprinkle flour over mushrooms, stir well. Gradually add chicken broth, stirring to prevent lumps. Simmer until slightly thickened.","Stir in sour cream, Dijon mustard, and paprika. Mix well.","Return chicken to skillet, simmer 5–7 min until fully cooked and sauce is thick.","Garnish with parsley. Serve over egg noodles, rice, or mashed potatoes."]},
+  {id:"2",name:"Bourbon Chicken",prep:"10 min",cook:"20 min",servings:"4",photo:"",ingredients:["1½ lbs boneless skinless chicken thighs, bite-sized","2 tbsp vegetable oil","½ cup bourbon","½ cup soy sauce","¼ cup brown sugar","¼ cup ketchup","2 tbsp rice vinegar","2 cloves garlic, minced","1 tsp ground ginger","½ tsp crushed red pepper flakes","1 tbsp cornstarch","2 tbsp water","2 green onions, chopped","Cooked rice for serving"],steps:["Season chicken with salt and pepper.","Heat oil in skillet over medium-high. Cook chicken 5–7 min until browned. Remove.","In same skillet, combine bourbon, soy sauce, brown sugar, ketchup, rice vinegar, garlic, ginger, and red pepper. Bring to a simmer.","Mix cornstarch with water. Add to sauce, stir until thickened, 2–3 min.","Return chicken to skillet, toss to coat. Cook 2–3 more min.","Garnish with green onions. Serve over rice."]},
+  {id:"3",name:"Chicken Piccata",prep:"10 min",cook:"15 min",servings:"4",photo:"",ingredients:["2 chicken breasts","⅓ cup all-purpose flour","1 tsp salt","½ tsp pepper","2 tbsp olive oil","½ cup lemon juice, freshly squeezed","½ cup chicken stock","1 cup white wine","4 tbsp unsalted butter, divided","¼ cup capers, drained","¼ cup parsley"],steps:["Cut chicken breasts in half lengthwise, then pound to flatten.","Season with salt and pepper, then dredge in flour.","Add olive oil and 2 tbsp butter to a large pan over medium-high. Cook chicken ~3 min per side until golden. Remove.","Add stock, wine, lemon juice, salt, and pepper. Bring to a boil, deglaze. Reduce to a simmer, add capers. Let reduce by half.","Remove from heat, stir in remaining 2 tbsp butter.","Return chicken to pan, spoon sauce over cutlets. Sprinkle with parsley and serve."]},
+  {id:"4",name:"Chicken Alfredo",prep:"10 min",cook:"20 min",servings:"6",photo:"",ingredients:["1 (16 oz) package fettuccine pasta","1 lb boneless skinless chicken breasts","¾ tsp salt","¼ tsp black pepper","2 tbsp olive oil","1 tbsp unsalted butter","2 cups heavy cream","½ cup unsalted butter, cubed","3 cloves garlic, minced","1 cup grated parmesan cheese","Fresh parsley for garnish"],steps:["Bring a large pot of salted water to a boil.","Season chicken with salt and pepper. Heat oil and butter in large skillet over medium-high. Cook chicken until 165°F, 7–9 min per side. Remove and cover. Wipe skillet clean.","Cook fettuccine per package directions. Drain, reserving ½ cup pasta water.","Combine cream, ½ cup butter, and garlic in same skillet. Cook over medium heat whisking until butter melts. Bring to a low simmer, whisking until slightly thickened, ~5 min.","Gradually whisk in Parmesan until smooth. Add cooked pasta, toss to coat.","Slice chicken into strips. Divide pasta, top with chicken. Garnish with parsley."]},
+  {id:"5",name:"Chicken Florentine",prep:"10 min",cook:"30 min",servings:"4",photo:"",ingredients:["4 large chicken breasts, pounded","1 tsp salt","½ tsp pepper","⅓ cup flour for dredging","2 tbsp olive oil","4 tbsp butter, divided","5 cloves garlic, minced","¾ cup dry white wine","½ tsp Italian seasoning","1 cup heavy/whipping cream","3 cups fresh baby spinach","¾ cup freshly grated parmesan cheese","Parsley for garnish"],steps:["Combine flour, salt, and pepper. Pound chicken breasts to ~1 inch thick. Dredge in seasoned flour.","Heat 1 tbsp oil and 1 tbsp butter in pan over medium-high. Cook two chicken breasts covered until golden, ~4 min per side. Cook to 165°F. Remove. Repeat.","Reduce heat to medium. Melt 2 tbsp butter, add garlic, stir 30–45 seconds until fragrant.","Pour in wine, cook until reduced by half. Stir in cream, bring to a simmer. Add Parmesan, stir until melted.","Add spinach, cook until wilted. Return chicken to pan. Simmer ~4 min until sauce thickens. Garnish and serve."]},
+  {id:"6",name:"Chicken Francese",prep:"15 min",cook:"20 min",servings:"4",photo:"",ingredients:["4 boneless skinless chicken breasts (6 oz each)","¼ cup all-purpose flour","1¼ tsp salt, divided","¾ tsp black pepper, divided","2 large eggs, beaten","¼ cup olive oil","1 lemon, thinly sliced","3 tbsp unsalted butter","1 tbsp all-purpose flour","1 cup chicken broth","½ cup white wine","1 tbsp fresh lemon juice","2 tbsp chopped flat-leaf parsley"],steps:["Pound chicken breasts to ~½-inch thickness between plastic wrap.","Combine ¼ cup flour, 1 tsp salt, and ½ tsp pepper in a shallow dish. Place beaten eggs in another dish.","Heat oil in large nonstick skillet over medium-high. Dredge chicken in flour, dip in egg, cook until golden ~4 min per side. Cook to 165°F. Remove. Repeat.","Add lemon slices to skillet, cook ~1 min. Transfer to plate.","Wipe skillet. Over medium heat, melt butter. Add 1 tbsp flour, cook 1 min stirring. Gradually whisk in broth and wine. Simmer until thickened, ~4 min.","Stir in lemon juice, remaining salt and pepper. Return chicken and lemon slices. Spoon sauce over chicken. Sprinkle with parsley and serve."]},
+  {id:"7",name:"Chicken Noodle Casserole",prep:"10 min",cook:"35 min",servings:"6",photo:"",ingredients:["2½ cups diced chicken","1 tsp Italian Seasoning","¾ tsp Garlic Salt","¼ tsp Pepper","2 tbsp olive oil","2 cups broccoli florets","3 cups dry Rotini","10.5 oz condensed cream of mushroom soup","8 oz sour cream","½ cup milk","2 cups sharp white cheddar cheese, shredded","1 cup regular cheddar, shredded","1 cup French's crispy fried onions"],steps:["Preheat oven to 375°F. Season chicken with Italian seasoning, garlic salt, and pepper.","Heat olive oil over medium-high. Cook chicken 3 min. Add broccoli, cook 3–4 more min. Remove from heat.","Cook rotini 1 min less than al dente. Drain.","Add cream of mushroom soup, sour cream, milk, and 2 cups sharp white cheddar to pot with chicken and broccoli. Stir. Add drained pasta, mix gently.","Transfer to a lightly greased 9x13 casserole dish. Top with 1 cup regular cheddar. Cover and bake 25 min.","Remove cover, add crispy fried onions. Bake uncovered 8 min. Serve."]},
+  {id:"8",name:"Chicken Fajitas Casserole",prep:"10 min",cook:"35 min",servings:"8",photo:"",ingredients:["1 tbsp olive oil","6 boneless skinless chicken thighs or breasts, bite-sized","4 bell peppers, sliced (mixed colors)","1 small onion, sliced","1 packet fajita seasoning mix","1 cup sour cream","4 oz cream cheese, softened","2 cups cheddar cheese, grated"],steps:["Preheat oven to 350°F. Sauté chicken in olive oil until cooked through. Remove from skillet and set aside.","Add onions and peppers to skillet and sauté until desired tenderness.","Return chicken to pan. Stir in fajita seasoning, sour cream, and cream cheese. Mix well.","Sprinkle with cheddar cheese. Bake in oven 10–15 min until cheese is melted."]},
+  {id:"9",name:"Chicken Broccoli Rice Casserole",prep:"10 min",cook:"50 min",servings:"6",photo:"",ingredients:["2 tbsp butter","2 boneless skinless chicken breasts","1 tsp Italian Seasoning","Salt/Pepper to taste","2½ cups chicken broth","1 tbsp olive oil","1¼ cups white long grain rice, uncooked","2 cups fresh broccoli florets","10.5 oz condensed Cream of Chicken Soup","½ cup milk","½ cup sour cream","2 cups shredded cheddar cheese","1 cup Ritz crackers, crushed","2 tbsp melted butter"],steps:["Preheat oven to 350°F. Cut chicken into bite-sized pieces, season.","Heat butter in a large pot over medium. Cook chicken until golden, ~5 min. Remove.","Add chicken broth, olive oil, and rice to pot. Bring to a boil, reduce to simmer. Cover tightly and cook 6 min. Add broccoli, cook 9 more min. Let stand covered 10 min.","Add cooked chicken, cream of chicken soup, milk, sour cream, and half the cheddar. Mix gently. Transfer to lightly greased 9x13 casserole dish. Top with remaining cheese. Cover and bake 15 min.","Mix melted butter with crushed Ritz crackers. Top casserole and bake uncovered 10 more min. Let sit 5 min before serving."]},
+  {id:"10",name:"Chicken Mushroom & Spinach Lasagna",prep:"25 min",cook:"1 hr",servings:"8",photo:"",ingredients:["7½ tbsp olive oil","3 cups chopped onion","6 tbsp minced garlic","24 oz white mushrooms, thinly sliced","3 tsp dried basil","3 tsp dried oregano","1½ tsp red pepper flakes","3¾ tsp kosher salt, divided","3 bags (6 oz each) fresh baby spinach","6 cups shredded cooked chicken","6 cups low-sodium chicken stock","¾ cup all-purpose flour","6 cups whole milk","¾ tsp nutmeg","1½ cup shredded Parmesan cheese","24 no-boil lasagna noodles","3¾ cups shredded mozzarella cheese"],steps:["Preheat oven to 375°F. Heat large sauté pan over medium-high. Add oil, onions, garlic, mushrooms, herbs, and ¼ tsp salt. Sauté 5 min until mushrooms soften and liquid evaporates.","Stir in spinach; cook until wilted. Stir in cooked chicken. Set aside.","Make sauce: whisk ½ cup chicken stock with flour to make a slurry. In a saucepan, combine remaining stock, milk, nutmeg, and 1 tsp salt. Bring to a slow simmer. Whisk in slurry, simmer until thickened, 5–8 min. Stir in Parmesan, remove from heat.","Pour ½ cup sauce into bottom of 10x10 baking dish. Layer: noodles, chicken mixture, sauce, mozzarella. Repeat 3 more layers.","Cover with foil, bake 25 min. Uncover, bake 15 more min. Broil 2–3 min for golden top. Let stand 15–20 min before cutting."]},
+  {id:"11",name:"Chicken Cacciatore",prep:"10 min",cook:"45 min",servings:"4",photo:"",ingredients:["2 tbsp olive oil","2 tbsp salted butter","6 chicken thighs","Salt and pepper","1–2 tsp dried basil","1–2 tsp dried oregano","1–2 thinly sliced shallots","3–4 cloves garlic, minced","1 cup sliced mushrooms","1 tbsp all-purpose flour","½ cup sherry or dry white wine","1 can diced tomatoes","½ red bell pepper, diced"],steps:["Heat olive oil and butter in large skillet over medium-high. Pat chicken dry. Brown with salt and pepper. Add basil and oregano, sauté 30 seconds. Remove chicken.","Add shallots and garlic, cook 1–2 min. Add mushrooms, sauté 1–2 min. Sprinkle flour, sauté 1–2 min.","Add sherry/broth, scrape up browned bits, simmer 2–3 min. Return chicken to pan. Add canned tomatoes with juice and diced bell pepper.","Bring to a simmer. Reduce heat to low, cover, and cook 20 min. Season to taste, serve hot over spaghetti noodles."]},
+  {id:"12",name:"Chicken Penne Al Limone",prep:"5 min",cook:"20 min",servings:"2",photo:"",ingredients:["1 clove garlic","1 zucchini","1 lemon","¼ oz parsley","6 oz penne pasta","10 oz chicken breast strips","4 oz cream sauce base","3 tbsp Parmesan cheese","2 tbsp butter","Olive oil, salt, black pepper"],steps:["Bring a large pot of salted water to a boil. Thinly slice garlic. Quarter zucchini and cut into ½-inch pieces. Zest and quarter lemon. Finely chop parsley.","Heat a drizzle of olive oil in a large pan over medium. Add garlic, cook until golden, ~1 min. Transfer to a plate. Wipe out pan.","Cook penne until al dente, 9–11 min. Reserve 1 cup pasta water, then drain. Cook zucchini in oil until tender and golden, 5–6 min. Transfer to a plate.","Pat chicken dry, season. Cook in same pan until browned and cooked through, 4–6 min. Stir in cream sauce base, ¼ cup reserved pasta water, and a big squeeze of lemon juice. Cook until thickened, 2–3 min.","Add penne, toasted garlic, zucchini, half the Parmesan, half the parsley, half the lemon zest, and 2 tbsp butter. Toss to combine. Top with remaining Parmesan and parsley."]},
+  {id:"13",name:"Cherry Balsamic Chicken",prep:"15 min",cook:"35 min",servings:"2",photo:"",ingredients:["10 oz chicken cutlets","1 clove garlic, minced","9 oz carrots, cut diagonally","2 scallions, sliced","½ oz sliced almonds","2.5 oz Israeli couscous","1 chicken stock concentrate","1 cherry jam packet","1 white balsamic vinegar packet","3 tbsp butter, divided","Olive oil, salt, black pepper"],steps:["Preheat oven to 425°F. Melt 1 tbsp butter in small pot. Add almonds, cook stirring until lightly browned, 2–3 min. Add garlic, couscous, and a pinch of salt; cook 30 sec. Stir in ¾ cup water, cover. Bring to boil, reduce to low, simmer until tender, 6–8 min. Keep covered off heat.","Toss carrots on a baking sheet with olive oil, salt, and pepper. Roast until browned and tender, 20–25 min.","Pat chicken dry, season generously. Heat oil in a large pan over medium-high. Cook chicken until browned and cooked through, 3–5 min per side. Transfer to cutting board to rest.","In same pan, heat a drizzle of olive oil. Add scallion whites, cook 1 min. Add vinegar, stock concentrate, jam, and ¼ cup water. Whisk to combine. Bring to a simmer, cook until thickened, 1–2 min. Remove from heat, stir in 1 tbsp butter.","Stir 1 tbsp butter into couscous. Thinly slice chicken. Divide couscous, chicken, and carrots between plates. Top chicken with sauce. Garnish with scallion greens."]},
+  {id:"14",name:"Cheesy Chicken & Guac Sandos",prep:"5 min",cook:"5 min",servings:"2",photo:"",ingredients:["2 brioche buns","1 tomato, sliced","8.6 oz fully cooked chicken breasts","1 tbsp Mexican spice blend","¼ cup Monterey Jack cheese, shredded","4 tbsp guacamole","2 tbsp mayonnaise","Olive oil, salt, black pepper"],steps:["Halve buns and toast until golden brown. Slice tomato into ¼-inch rounds, season with salt.","Pat chicken dry. Thinly slice crosswise into strips.","In a microwave-safe bowl, toss chicken with Mexican spice blend, a drizzle of olive oil, salt and pepper. Sprinkle with Monterey Jack. Cover with plastic wrap and microwave until chicken is warmed and cheese melts, 1–2 min.","Combine guacamole and mayonnaise in a small bowl. Spread on cut sides of toasted buns. Fill buns with cheesy chicken, top with tomato slices. Serve."]},
+  {id:"15",name:"Baked Caesar Chicken",prep:"5 min",cook:"30 min",servings:"4",photo:"",ingredients:["4 boneless skinless chicken breasts","1½ cups Parmesan cheese, grated","1 cup Caesar salad dressing","½ cup sour cream (optional)"],steps:["Heat oven to 375°F. Spray an 8x11 baking dish with cooking spray.","Pound chicken breasts to an even thickness if needed.","Sprinkle chicken with grated Parmesan and freshly ground pepper.","Mix Caesar dressing with sour cream and pour over chicken.","Bake 25–30 min until internal temperature reaches 165°F. Serve immediately."]},
+  {id:"16",name:"Crockpot BBQ Chicken",prep:"5 min",cook:"6 hrs",servings:"4",photo:"",ingredients:["3–4 lbs chicken (legs, thighs, or breasts)","1 bottle BBQ sauce","½ cup unsalted butter","1 tsp garlic powder","1 tsp black pepper","Salt to taste"],steps:["Place chicken in the crockpot.","Pour BBQ sauce over the chicken.","Sprinkle garlic powder, salt, and black pepper evenly.","Place butter on top.","Cover and cook on LOW for 6–7 hours or HIGH for 3–4 hours, until chicken is tender.","Serve with corn on the cob, coleslaw, or mashed potatoes."]}
+];
+
+var recipes = [];
+var emails = ["reillybonnie67@gmail.com"];
+var photoMap = {};
+var bannerUrl = "";
+var currentId = null;
+
+function load() {
+  var r = localStorage.getItem("cb_recipes");
+  var e = localStorage.getItem("cb_emails");
+  var p = localStorage.getItem("cb_photos");
+  var b = localStorage.getItem("cb_banner");
+  recipes  = r ? JSON.parse(r) : JSON.parse(JSON.stringify(INITIAL));
+  emails   = e ? JSON.parse(e) : ["reillybonnie67@gmail.com"];
+  photoMap = p ? JSON.parse(p) : {};
+  bannerUrl= b || "";
+  if (!r) saveRecipes();
+  updateBanner();
+}
+
+function saveRecipes() { localStorage.setItem("cb_recipes", JSON.stringify(recipes)); }
+function saveEmails()  { localStorage.setItem("cb_emails",  JSON.stringify(emails)); }
+function savePhotos()  { localStorage.setItem("cb_photos",  JSON.stringify(photoMap)); }
+function saveBanner()  { localStorage.setItem("cb_banner",  bannerUrl); }
+
+function showView(name) {
+  document.querySelectorAll(".view").forEach(function(v) { v.classList.remove("active"); });
+  document.getElementById("view-" + name).classList.add("active");
+  window.scrollTo(0, 0);
+  if (name === "list")     renderList();
+  if (name === "settings") renderSettings();
+}
+
+function updateBanner() {
+  var wrap = document.getElementById("banner-wrap");
+  if (bannerUrl) {
+    wrap.innerHTML = '<img class="banner" src="' + bannerUrl + '" alt="banner" onerror="this.parentNode.innerHTML=\'<div class=banner-placeholder>🍽️</div>\'">';
+  } else {
+    wrap.innerHTML = '<div class="banner-placeholder">🍽️</div>';
+  }
+}
+
+function setBanner() {
+  var url = document.getElementById("banner-url").value.trim();
+  if (!url.startsWith("http")) { showToast("Please enter a valid URL."); return; }
+  bannerUrl = url; saveBanner(); updateBanner();
+  showToast("✅ Banner updated!"); showView("list");
+}
+
+function renderList() {
+  var q = document.getElementById("search").value.toLowerCase();
+  var filtered = recipes.filter(function(r) { return r.name.toLowerCase().includes(q); });
+  document.getElementById("recipe-count").textContent = recipes.length + " recipes";
+  var el = document.getElementById("recipe-list");
+  if (!filtered.length) { el.innerHTML = '<div class="empty">No recipes found</div>'; return; }
+  el.innerHTML = filtered.map(function(r) {
+    var src = r.photo || photoMap[r.id] || "";
+    var thumb = src
+      ? '<img class="card-thumb" src="' + src + '" alt="' + r.name + '" onerror="this.outerHTML=\'<div class=card-thumb-placeholder>🍗</div>\'">'
+      : '<div class="card-thumb-placeholder">🍗</div>';
+    return '<div class="card" onclick="openRecipe(\'' + r.id + '\')">' + thumb +
+      '<div class="card-body"><div><div class="card-name">' + r.name + '</div>' +
+      '<div class="card-meta">Prep ' + r.prep + ' · Cook ' + r.cook + ' · Serves ' + r.servings + '</div></div>' +
+      '<span class="card-arrow">›</span></div></div>';
+  }).join("");
+}
+
+function openRecipe(id) {
+  currentId = id;
+  var r = recipes.find(function(x) { return x.id === id; });
+  document.getElementById("d-title").textContent = r.name;
+  var photoSrc = r.photo || photoMap[id] || "";
+  var photoHtml = photoSrc
+    ? '<img class="recipe-photo" src="' + photoSrc + '" alt="' + r.name + '" onerror="this.outerHTML=\'<div class=photo-placeholder>🍗</div>\'">'
+    : '<div class="photo-placeholder" id="photo-ph">🍗</div>';
+  document.getElementById("d-body").innerHTML =
+    photoHtml +
+    '<div class="photo-actions">' +
+      '<input class="photo-url-input" id="photo-url-input" placeholder="Paste photo URL to override..." value="' + photoSrc + '">' +
+      '<button class="photo-set-btn" onclick="setPhotoUrl()">Set</button>' +
+    '</div>' +
+    '<div class="meta-row">' +
+      '<div class="meta-box"><div class="meta-label">Prep</div><div class="meta-val">' + r.prep + '</div></div>' +
+      '<div class="meta-box"><div class="meta-label">Cook</div><div class="meta-val">' + r.cook + '</div></div>' +
+      '<div class="meta-box"><div class="meta-label">Serves</div><div class="meta-val">' + r.servings + '</div></div>' +
+    '</div>' +
+    '<div class="section-title">Ingredients</div>' +
+    r.ingredients.map(function(i) { return '<div class="ingredient"><span class="dot">•</span><span>' + i + '</span></div>'; }).join("") +
+    '<div class="section-title">Instructions</div>' +
+    r.steps.map(function(s, i) { return '<div class="step"><div class="step-num">' + (i+1) + '</div>' + s + '</div>'; }).join("") +
+    '<div class="detail-actions">' +
+      '<button class="edit-btn" onclick="openEdit()">✏️ Edit</button>' +
+      '<button class="email-btn" onclick="emailIngredients()">📧 Email ingredients</button>' +
+    '</div>';
+  showView("detail");
+  if (!photoSrc) fetchPhoto(r);
+}
+
+function setPhotoUrl() {
+  var url = document.getElementById("photo-url-input").value.trim();
+  if (!url.startsWith("http")) { showToast("Please enter a valid URL."); return; }
+  var r = recipes.find(function(x) { return x.id === currentId; });
+  r.photo = url; saveRecipes();
+  photoMap[currentId] = url; savePhotos();
+  openRecipe(currentId);
+  showToast("✅ Photo updated!");
+}
+
+function fetchPhoto(r) {
+  var query = encodeURIComponent(r.name + " food recipe");
+  var img = new Image();
+  img.onload = function() {
+    if (this.src && this.src.startsWith("http")) {
+      photoMap[r.id] = this.src; savePhotos();
+      var ph = document.getElementById("photo-ph");
+      if (ph) ph.outerHTML = '<img class="recipe-photo" src="' + this.src + '" alt="' + r.name + '">';
+      var inp = document.getElementById("photo-url-input");
+      if (inp) inp.value = this.src;
+    }
+  };
+  img.src = "https://source.unsplash.com/400x300/?" + query;
+}
+
+function emailIngredients() {
+  if (!currentId) return;
+  if (!emails.length) { showToast("Add an email in Settings first."); return; }
+  var r = recipes.find(function(x) { return x.id === currentId; });
+  var subject = "Ingredients: " + r.name;
+  var body = r.name + "\nPrep: " + r.prep + " | Cook: " + r.cook + " | Serves: " + r.servings +
+    "\n\nINGREDIENTS\n" + r.ingredients.map(function(i) { return "• " + i; }).join("\n");
+  var to = emails.join(",");
+  var gmailUrl = "https://mail.google.com/mail/?view=cm&to=" + encodeURIComponent(to) +
+    "&su=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+  var mailtoUrl = "mailto:" + encodeURIComponent(to) +
+    "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+  var existing = document.getElementById("email-picker");
+  if (existing) existing.remove();
+  var picker = document.createElement("div");
+  picker.id = "email-picker";
+  picker.style.cssText = "position:fixed;bottom:80px;left:50%;transform:translateX(-50%);background:white;border-radius:16px;box-shadow:0 4px 24px rgba(0,0,0,0.18);padding:16px;z-index:300;min-width:260px;text-align:center;border:1px solid #e8e8e8;";
+  picker.innerHTML =
+    '<div style="font-size:13px;color:#888;margin-bottom:12px;">Send ingredients for<br><strong>' + r.name + '</strong></div>' +
+    '<a href="' + gmailUrl + '" target="_blank" style="display:block;background:#d93025;color:white;padding:11px;border-radius:10px;font-size:15px;font-weight:500;text-decoration:none;margin-bottom:8px;">📧 Open in Gmail</a>' +
+    '<a href="' + mailtoUrl + '" style="display:block;background:#f0f0f0;color:#333;padding:11px;border-radius:10px;font-size:15px;font-weight:500;text-decoration:none;margin-bottom:8px;">✉️ Open in Mail app</a>' +
+    '<button onclick="document.getElementById(\'email-picker\').remove()" style="background:none;border:none;color:#aaa;font-size:14px;cursor:pointer;padding:4px;">Cancel</button>';
+  document.body.appendChild(picker);
+}
+
+function openEdit() {
+  var r = recipes.find(function(x) { return x.id === currentId; });
+  document.getElementById("e-name").value = r.name;
+  document.getElementById("e-prep").value = r.prep;
+  document.getElementById("e-cook").value = r.cook;
+  document.getElementById("e-servings").value = r.servings;
+  document.getElementById("e-photo").value = r.photo || photoMap[currentId] || "";
+  document.getElementById("e-ingredients").value = r.ingredients.join("\n");
+  document.getElementById("e-steps").value = r.steps.join("\n");
+  showView("edit");
+}
+
+function saveEdit() {
+  var idx = recipes.findIndex(function(x) { return x.id === currentId; });
+  if (idx === -1) return;
+  var photo = document.getElementById("e-photo").value.trim();
+  recipes[idx] = {
+    id: currentId,
+    name:        document.getElementById("e-name").value.trim() || recipes[idx].name,
+    prep:        document.getElementById("e-prep").value.trim() || "—",
+    cook:        document.getElementById("e-cook").value.trim() || "—",
+    servings:    document.getElementById("e-servings").value.trim() || "—",
+    photo:       photo,
+    ingredients: document.getElementById("e-ingredients").value.split("\n").map(function(s) { return s.trim(); }).filter(Boolean),
+    steps:       document.getElementById("e-steps").value.split("\n").map(function(s) { return s.trim(); }).filter(Boolean)
+  };
+  if (photo) { photoMap[currentId] = photo; savePhotos(); }
+  saveRecipes();
+  showToast("✅ Recipe saved!");
+  openRecipe(currentId);
+}
+
+function deleteCurrentRecipe() {
+  var r = recipes.find(function(x) { return x.id === currentId; });
+  if (!confirm('Delete "' + r.name + '"?')) return;
+  recipes = recipes.filter(function(x) { return x.id !== currentId; });
+  saveRecipes(); showView("list"); showToast("Recipe deleted.");
+}
+
+function renderSettings() {
+  var el = document.getElementById("email-list");
+  if (!emails.length) {
+    el.innerHTML = '<div style="font-size:14px;color:#bbb;padding:8px 0;">No email addresses yet.</div>';
+  } else {
+    el.innerHTML = emails.map(function(e) {
+      return '<div class="email-row"><span>' + e + '</span><button class="remove-btn" onclick="removeEmail(\'' + e + '\')">✕</button></div>';
+    }).join("");
+  }
+  document.getElementById("stats-text").textContent = recipes.length + " recipes in your cookbook";
+  var bi = document.getElementById("banner-url");
+  if (bi) bi.value = bannerUrl || "";
+}
+
+function addEmail() {
+  var val = document.getElementById("new-email").value.trim().toLowerCase();
+  if (!val.includes("@")) { showToast("Please enter a valid email."); return; }
+  if (emails.includes(val)) { showToast("Email already in list."); return; }
+  emails.push(val); saveEmails();
+  document.getElementById("new-email").value = "";
+  renderSettings(); showToast("✅ Email added.");
+}
+
+function removeEmail(e) {
+  emails = emails.filter(function(x) { return x !== e; });
+  saveEmails(); renderSettings(); showToast("Email removed.");
+}
+
+function parseRecipeViaAI(text, callback) {
+  fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 1000,
+      messages: [{ role: "user", content: "Extract the recipe from this text and return ONLY a JSON object with fields: name, prep, cook, servings, ingredients (array of strings), steps (array of strings). No markdown, no explanation.\n\n" + text.slice(0, 4000) }]
+    })
+  })
+  .then(function(res) { return res.json(); })
+  .then(function(data) {
+    var raw = (data.content && data.content[0] ? data.content[0].text : "").trim().replace(/```json|```/g, "").trim();
+    var parsed = JSON.parse(raw);
+    callback(null, parsed);
+  })
+  .catch(function(err) { callback(err, null); });
+}
+
+function parseImageViaAI(b64, mediaType, callback) {
+  fetch("https://api.anthropic.com/v1/messages", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      model: "claude-sonnet-4-20250514",
+      max_tokens: 1000,
+      messages: [{ role: "user", content: [
+        { type: "image", source: { type: "base64", media_type: mediaType, data: b64 } },
+        { type: "text",  text: "Extract the recipe from this image and return ONLY a JSON object with fields: name, prep, cook, servings, ingredients (array of strings), steps (array of strings). No markdown, no explanation." }
+      ]}]
+    })
+  })
+  .then(function(res) { return res.json(); })
+  .then(function(data) {
+    var raw = (data.content && data.content[0] ? data.content[0].text : "").trim().replace(/```json|```/g, "").trim();
+    var parsed = JSON.parse(raw);
+    callback(null, parsed);
+  })
+  .catch(function(err) { callback(err, null); });
+}
+
+function handlePaste() {
+  var raw = document.getElementById("paste-text").value.trim();
+  if (!raw) { showToast("Please paste some recipe text first."); return; }
+  var chunks = raw.split(/\n---\n/).map(function(s) { return s.trim(); }).filter(Boolean);
+  var btn = document.getElementById("paste-btn");
+  btn.disabled = true; btn.textContent = "Parsing...";
+  var queue = document.getElementById("paste-queue");
+  var items = chunks.map(function(c, i) { return { text: c, index: i, status: "pending", parsed: "" }; });
+
+  function render() {
+    queue.innerHTML = items.map(function(it) {
+      var icon = it.status === "done" ? "✅" : it.status === "error" ? "❌" : "⏳";
+      return '<div class="queue-item"><span class="queue-status">' + icon + '</span><span>' + (it.parsed || ("Recipe " + (it.index + 1))) + '</span></div>';
+    }).join("");
+  }
+
+  var added = 0;
+  var i = 0;
+
+  function next() {
+    if (i >= items.length) {
+      showToast("✅ " + added + " of " + items.length + " recipe" + (items.length > 1 ? "s" : "") + " added!");
+      btn.disabled = false; btn.textContent = "Parse & Add Recipes";
+      if (added > 0) document.getElementById("paste-text").value = "";
+      return;
+    }
+    var item = items[i]; i++;
+    item.status = "loading"; render();
+    parseRecipeViaAI(item.text, function(err, parsed) {
+      if (err || !parsed) {
+        item.status = "error";
+      } else {
+        recipes.push({ id: Date.now().toString() + "_" + Math.random(), photo: "", name: parsed.name, prep: parsed.prep || "—", cook: parsed.cook || "—", servings: parsed.servings || "—", ingredients: parsed.ingredients || [], steps: parsed.steps || [] });
+        saveRecipes();
+        item.status = "done"; item.parsed = parsed.name; added++;
+      }
+      render(); next();
+    });
+  }
+
+  render(); next();
+}
+
+function handleUpload(input) {
+  var files = Array.from(input.files);
+  if (!files.length) return;
+  var queue = document.getElementById("upload-queue");
+  var items = files.map(function(f, i) { return { file: f, index: i, status: "pending", parsed: "" }; });
+
+  function render() {
+    queue.innerHTML = items.map(function(it) {
+      var icon = it.status === "done" ? "✅" : it.status === "error" ? "❌" : "⏳";
+      return '<div class="queue-item"><span class="queue-status">' + icon + '</span><span>' + (it.parsed || it.file.name) + '</span></div>';
+    }).join("");
+  }
+
+  var added = 0;
+  var i = 0;
+
+  function next() {
+    if (i >= items.length) {
+      showToast("✅ " + added + " of " + items.length + " recipe" + (items.length > 1 ? "s" : "") + " added!");
+      input.value = ""; return;
+    }
+    var item = items[i]; i++;
+    item.status = "loading"; render();
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      parseRecipeViaAI(e.target.result, function(err, parsed) {
+        if (err || !parsed) {
+          item.status = "error";
+        } else {
+          recipes.push({ id: Date.now().toString() + "_" + Math.random(), photo: "", name: parsed.name, prep: parsed.prep || "—", cook: parsed.cook || "—", servings: parsed.servings || "—", ingredients: parsed.ingredients || [], steps: parsed.steps || [] });
+          saveRecipes();
+          item.status = "done"; item.parsed = parsed.name; added++;
+        }
+        render(); next();
+      });
+    };
+    reader.onerror = function() { item.status = "error"; render(); next(); };
+    reader.readAsText(item.file);
+  }
+
+  render(); next();
+}
+
+function handlePhotoUpload(input) {
+  var files = Array.from(input.files);
+  if (!files.length) return;
+  var queue = document.getElementById("photo-queue");
+  var items = files.map(function(f, i) { return { file: f, index: i, status: "pending", parsed: "" }; });
+
+  function render() {
+    queue.innerHTML = items.map(function(it) {
+      var icon = it.status === "done" ? "✅" : it.status === "error" ? "❌" : "⏳";
+      return '<div class="queue-item"><span class="queue-status">' + icon + '</span><span>' + (it.parsed || it.file.name) + '</span></div>';
+    }).join("");
+  }
+
+  var added = 0;
+  var i = 0;
+
+  function next() {
+    if (i >= items.length) {
+      showToast("✅ " + added + " of " + items.length + " recipe" + (items.length > 1 ? "s" : "") + " added!");
+      input.value = ""; return;
+    }
+    var item = items[i]; i++;
+    item.status = "loading"; render();
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      var b64 = e.target.result.split(",")[1];
+      var mediaType = item.file.type || "image/jpeg";
+      parseImageViaAI(b64, mediaType, function(err, parsed) {
+        if (err || !parsed) {
+          item.status = "error";
+        } else {
+          recipes.push({ id: Date.now().toString() + "_" + Math.random(), photo: "", name: parsed.name, prep: parsed.prep || "—", cook: parsed.cook || "—", servings: parsed.servings || "—", ingredients: parsed.ingredients || [], steps: parsed.steps || [] });
+          saveRecipes();
+          item.status = "done"; item.parsed = parsed.name; added++;
+        }
+        render(); next();
+      });
+    };
+    reader.onerror = function() { item.status = "error"; render(); next(); };
+    reader.readAsDataURL(item.file);
+  }
+
+  render(); next();
+}
+
+function saveManual() {
+  var name = document.getElementById("f-name").value.trim();
+  if (!name) { showToast("Please enter a recipe name."); return; }
+  recipes.push({
+    id: Date.now().toString(),
+    name: name,
+    prep:        document.getElementById("f-prep").value.trim() || "—",
+    cook:        document.getElementById("f-cook").value.trim() || "—",
+    servings:    document.getElementById("f-servings").value.trim() || "—",
+    photo: "",
+    ingredients: document.getElementById("f-ingredients").value.split("\n").map(function(s) { return s.trim(); }).filter(Boolean),
+    steps:       document.getElementById("f-steps").value.split("\n").map(function(s) { return s.trim(); }).filter(Boolean)
+  });
+  saveRecipes();
+  showToast("✅ \"" + name + "\" added!");
+  ["f-name","f-prep","f-cook","f-servings","f-ingredients","f-steps"].forEach(function(id) { document.getElementById(id).value = ""; });
+  showView("list");
+}
+
+function exportData() {
+  var blob = new Blob([JSON.stringify(recipes, null, 2)], { type: "application/json" });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement("a");
+  a.href = url; a.download = "bonnies-cookbook-backup-march13.json"; a.click();
+  URL.revokeObjectURL(url);
+  showToast("✅ Backup downloaded!");
+}
+
+function showToast(msg) {
+  var t = document.getElementById("toast");
+  t.textContent = msg; t.classList.add("show");
+  setTimeout(function() { t.classList.remove("show"); }, 2800);
+}
+
+load();
+renderList();
+</script>
+</body>
+</html>
